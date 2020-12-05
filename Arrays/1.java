@@ -15,6 +15,7 @@ class reverse {
         for (int i = 0; i < n; i++) {
             System.out.print(arr[i]);
         }
+        sc.close();
     }
 
     private static void rev(int a[], int start, int end) {
