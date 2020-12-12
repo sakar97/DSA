@@ -16,12 +16,13 @@ class duplicate_array {
     }
 
     private static int dup(int[] arr, int n) {
-        HashMap<Integer, Integer> hs = new HashMap<>();
+        Map<Integer, Integer> hs = new HashMap<>();
         for (int i = 0; i < n; i++) {
             if (hs.containsKey(arr[i])) {
-                hs.put(i, hs.get(arr[i]) + 1);
+                hs.put(arr[i], hs.get(arr[i]) + 1);
+            } else {
+                hs.put(arr[i], 1);
             }
-            hs.put(arr[i], i);
         }
         for (Map.Entry<Integer, Integer> e : hs.entrySet()) {
             if (e.getValue() > 1) {
