@@ -1,3 +1,5 @@
+// IN:  { { 1, 1, 1 }, { 1, 0, 1 }, { 1, 1, 1 } }
+// OUT: { { 1, 0, 1 }, { 0, 0, 0 }, { 1, 0, 1 } }
 public class set_matrix_zero {
     public static void main(String args[]) {
 
