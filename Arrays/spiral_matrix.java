@@ -1,6 +1,6 @@
 import java.util.*;
 
-class spiral_matrix {
+class spirals_matrix {
     public List<Integer> spiralOrder(int[][] matrix) {
         List<Integer> res = new ArrayList<>();
         if (matrix.length == 0)

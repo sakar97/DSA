@@ -1,6 +1,6 @@
 import java.util.*;
 
-class pascals_triangle {
+class pascal_triangle {
     public List<Integer> getRow(int rowIndex) {
         Integer[] res = new Integer[rowIndex + 1];
         Arrays.fill(res, 0);
