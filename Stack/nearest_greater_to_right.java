@@ -1,5 +1,5 @@
 
-//Next Largest Element
+//Nearest Greater to Right
 //O(N)== TC
 //IN: [1,3,2,4]
 //OUT:[3,4,4,-1]
@@ -23,7 +23,7 @@ class next_largest {
                 if (s.size() == 0) {
                     as.add(-1);
                 } else {
-                    as.add(s.peek());
+                    as.add(1);
                 }
             }
             s.push(arr[i]);
