@@ -1,0 +1,58 @@
+---
+  # Checking whether VM is registered with satellite or not. 
+  - name: checking subscription manager status of the host(VM)  
+    become: yes
+    shell: timeout 20 subscription-manager status | sed -n 's/.*Status:\ //p'
+    register: res
+    ignore_errors: true
+
+  - include: log_file.yml
+    vars:
+      content: "Subscribtion status of the host is {{res}}"
+      status: "INFO"
+    when: res
+
+  - name: Handling error when subscription manager status fail
+    block:    
+      - name: Sending an email when failed to check subscription manager status.
+        include_role:
+          name: common/send-email
+        vars:
+            mail_subject: Failed to check Subscription Manager Status.
+            mail_body: '<p>There are some problems while checking the subscription manager status on host <b>{{ inventory_hostname }}</b> </p>'
+        
+      - name: Including error details in log file
+        include: log_file.yml
+        vars:
+          content: "Fail to subscription manager status for the host {{ inventory_hostname }}"
+          status: "ERROR"
+
+      - name: Exiting the playbook due to failure in task
+        fail:
+          msg: "Something went wrong while subscription manager status for the host."
+    when: res is undefined
+
+  - name: testing subscription-manager status
+    debug:
+      msg: "{{res}}"
+
+  - block: 
+      - name: Clean and unregister subscription before registering
+        become: yes
+        shell: |
+              subscription-manager unregister
+              subscription-manager clean
+              yum clean all
+              rm -rf /var/cache/yum/*
+              rm -rf /etc/sysconfig/rhn/systemid
+        when: res.stdout_lines | length > 0 and res.stdout_lines[0] == "Unknown"
+      
+    rescue:
+      - name: Exiting the playbook due to failure in task
+        fail:
+          msg: "Something went wrong while cleaning the host."
+      
+      - include: log_file.yml
+        vars:
+            content: "Something went wrong while cleaning the host {{inventory_hostname}}"
+            status: "ERROR" 
